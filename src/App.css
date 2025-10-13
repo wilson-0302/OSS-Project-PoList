@@ -1,110 +1,155 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap');
-
-body {
-  font-family: 'Noto Sans KR', sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  margin: 0;
+/* .App {
   text-align: center;
 }
 
-.container {
-  max-width: 800px;
-  padding: 40px;
-  background-color: rgba(0, 0, 0, 0.2);
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(10px);
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
 }
 
-.header h1 {
-  font-size: 3rem;
-  margin-bottom: 10px;
-  font-weight: 700;
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
 }
 
-.header p {
-  font-size: 1.2rem;
-  font-weight: 300;
-  opacity: 0.9;
-}
-
-.countdown-timer {
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  gap: 20px;
-  margin: 40px 0;
+  font-size: calc(10px + 2vmin);
+  color: white;
 }
 
-.timer-segment {
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+} */
+/* 전체 레이아웃 */
+.app-container {
+  display: flex;
+  height: 100vh;
+  background-color: #f9f9f6;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+/* === 사이드바 === */
+.sidebar {
+  background-color: #f5f6f1;
+  width: 240px;
+  transition: all 0.25s ease;
+  border-right: 1px solid #e0e0d8;
   display: flex;
   flex-direction: column;
 }
 
-.time {
-  font-size: 4rem;
-  font-weight: 700;
-}
+.sidebar.closed { width: 72px; }
 
-.label {
-  font-size: 1rem;
-  text-transform: uppercase;
-  opacity: 0.8;
-}
-
-.subscribe-form h2 {
-  font-size: 1.8rem;
-  margin-bottom: 10px;
-}
-
-.subscribe-form p {
-  margin-bottom: 20px;
-}
-
-.subscribe-form form {
+/* 헤더(열림) */
+.sidebar-header {
+  box-sizing: border-box;
+  height: 56px;               /* ← 헤더 높이 고정(원하면 60px로) */
+  padding: 10px 12px;         /* 좌우 여백 일정하게 */
   display: flex;
-  justify-content: center;
-  gap: 10px;
+  align-items: center;
+  gap: 8px;
 }
 
-.subscribe-form input {
-  padding: 15px;
-  border-radius: 50px;
-  border: none;
-  width: 300px;
-  font-size: 1rem;
-}
 
-.subscribe-form button {
-  padding: 15px 30px;
-  border-radius: 50px;
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4b6043;
+  font-weight: 600;
+}
+.logo-text { line-height: 1; }  /* 폰트 baseline 차이 제거 */
+.logo-icon { width: 20px; height: 20px; }
+
+.toggle-btn {
+  margin-left: auto;            /* 오른쪽 끝으로 밀기 */
+  width: 36px;
+  height: 36px;
+  padding: 0;                   /* 기본 패딩 제거 */
+  color: #4b6043;
+  display: inline-grid;
+  place-items: center;          /* 아이콘 정확히 가운데 */
   border: none;
-  background-color: #ff4757;
-  color: white;
-  font-size: 1rem;
+  background: transparent;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  line-height: 0;               /* 버튼 기본 line-height로 생기는 세로 흔들림 방지 */
+  -webkit-appearance: none;
+}
+.toggle-btn:hover { background: #e7e8e0; }
+
+/* 버튼 안의 아이콘 크기 고정 + 블록화(여백 제거) */
+.toggle-btn svg {
+  width: 22px;
+  height: 22px;
+  display: block;               /* inline-svg의 하단 여백 제거 */
 }
 
-.subscribe-form button:hover {
-  background-color: #e03b49;
+.sidebar { width: 240px; }
+.sidebar.closed { width: 72px; }
+
+/* 닫힘 상태: 트리↔사이드바 아이콘 전환 버튼 */
+.collapsed-trigger {
+  position: relative;
+  width: 48px; height: 48px;
+  margin: 10px auto;
+  border: none; outline: none; cursor: pointer;
+  background: transparent;
+  border-radius: 12px;
+  display: grid; place-items: center;
+}
+.collapsed-trigger:hover { background: #e7e8e0; }
+
+.icon-base {
+  position: absolute;
+  width: 22px; height: 22px;
+  color: #4b6043;
+  transition: opacity 160ms ease, transform 160ms ease;
 }
 
-.footer {
-  margin-top: 40px;
-}
+/* 기본은 트리 보임 */
+.icon-tree { opacity: 1; transform: scale(1); }
+/* hover 시 트리는 사라지고 메뉴가 나타남 */
+.collapsed-trigger:hover .icon-tree { opacity: 0; transform: scale(0.85); }
+.icon-menu { opacity: 0; transform: scale(0.85); }
+.collapsed-trigger:hover .icon-menu { opacity: 1; transform: scale(1); }
 
-.social-links a {
-  color: white;
-  font-size: 1.5rem;
-  margin: 0 15px;
-  transition: color 0.3s ease;
-}
+/* 네비게이션 */
+.nav { list-style: none; padding: 8px; margin: 0; }
+.sidebar.closed .nav { display: none; } /* 닫힘 상태에선 완전 숨김 */
 
-.social-links a:hover {
-  color: #ff4757;
+.nav li {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; cursor: pointer; color: #4b6043;
+  border-radius: 10px; margin: 2px 4px;
+  transition: background-color 0.2s ease;
 }
+.nav li:hover { background-color: #e7e8e0; }
+
+.icon { width: 20px; height: 20px; }
+.menu-text { white-space: nowrap; }
+
+/* 메인 */
+.main-content {
+  flex: 1; display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  background-color: #fafaf7;
+}
+.page { text-align: center; padding: 20px; }
+.main-icon { width: 48px; height: 48px; color: #4b6043; margin-bottom: 10px; }

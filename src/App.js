@@ -1,91 +1,79 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
-
-// 아이콘을 위한 Font Awesome import
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTwitter, faInstagram, faGithub } from '@fortawesome/free-brands-svg-icons';
-import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-
+import React, { useState } from "react";
+import { Home, BarChart3, Folder, TreePine, PanelsTopLeft, Menu } from "lucide-react";
+import "./App.css";
 
 function App() {
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [page, setPage] = useState("home");
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  });
-
-  function calculateTimeLeft() {
-    // 목표 날짜 설정 (예: 2025년 12월 31일)
-    const difference = +new Date('2025-10-26') - +new Date();
-    let timeLeft = {};
-
-    if (difference > 0) {
-      timeLeft = {
-        일: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        시간: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        분: Math.floor((difference / 1000 / 60) % 60),
-        초: Math.floor((difference / 1000) % 60),
-      };
-    }
-
-    return timeLeft;
-  }
-
-  const timerComponents = [];
-
-  Object.keys(timeLeft).forEach((interval) => {
-    if (!timeLeft[interval]) {
-      return;
-    }
-
-    timerComponents.push(
-      <div key={interval} className="timer-segment">
-        <span className="time">{timeLeft[interval]}</span>
-        <span className="label">{interval}</span>
-      </div>
-    );
-  });
+  const toggleSidebar = () => setSidebarOpen((v) => !v);
 
   return (
-    <div className="container">
-      <header className="header">
-        <h1>🚀 Our Website is Coming Soon!</h1>
-        <p>저희의 새로운 웹사이트가 곧 여러분을 찾아갑니다. 잠시만 기다려주세요!</p>
-      </header>
-
-      <section className="countdown-timer">
-        {timerComponents.length ? timerComponents : <span>Time's up!</span>}
-      </section>
-
-      <section className="subscribe-form">
-        <h2>새 소식을 가장 먼저 받아보세요!</h2>
-        <p>이메일을 등록해주시면, 사이트 오픈 시 가장 먼저 알려드릴게요.</p>
-        <form>
-          <input type="email" placeholder="your-email@example.com" required />
-          <button type="submit">
-            알림 받기 <FontAwesomeIcon icon={faPaperPlane} />
+    <div className="app-container">
+      {/* 사이드바 */}
+      <aside className={`sidebar ${sidebarOpen ? "open" : "closed"}`}>
+        {/* 헤더 */}
+        {sidebarOpen ? (
+          <div className="sidebar-header">
+            <div className="logo">
+              <TreePine className="logo-icon" />
+              <span className="logo-text">Porest</span>
+            </div>
+            <button className="toggle-btn" onClick={toggleSidebar} aria-label="사이드바 접기">
+              <Menu />
+            </button>
+          </div>
+        ) : (
+          // 닫힘 상태: 나무 아이콘만 보이고 hover 시 사이드바 아이콘으로 전환
+          <button
+            className="collapsed-trigger"
+            onClick={toggleSidebar}
+            aria-label="사이드바 열기"
+            title="사이드바 열기"
+          >
+            <TreePine className="icon-base icon-tree" />
+            <PanelsTopLeft className="icon-base icon-menu" />
           </button>
-        </form>
-      </section>
+        )}
 
-      <footer className="footer">
-        <p>Follow us on social media:</p>
-        <div className="social-links">
-          <a href="https://youtu.be/9BalEldzE8o?si=iifuwIPVTMAG8WyK" target="_blank" rel="noopener noreferrer">
-            <FontAwesomeIcon icon={faTwitter} />
-          </a>
-          <a href="https://youtu.be/xvFZjo5PgG0?si=yHsgcFco7ntekPaw" target="_blank" rel="noopener noreferrer">
-            <FontAwesomeIcon icon={faInstagram} />
-          </a>
-          <a href="https://github.com/wilson-0302/OSS-Project-PoList.git" target="_blank" rel="noopener noreferrer">
-            <FontAwesomeIcon icon={faGithub} />
-          </a>
-        </div>
-      </footer>
+        {/* 네비게이션 (닫힘 상태에선 숨김) */}
+        <ul className="nav">
+          <li onClick={() => setPage("home")}>
+            <Home className="icon" />
+            <span className="menu-text">홈</span>
+          </li>
+          <li onClick={() => setPage("dashboard")}>
+            <BarChart3 className="icon" />
+            <span className="menu-text">대시보드</span>
+          </li>
+          <li onClick={() => setPage("projects")}>
+            <Folder className="icon" />
+            <span className="menu-text">나의 Porest</span>
+          </li>
+        </ul>
+      </aside>
+
+      {/* 메인 */}
+      <main className="main-content">
+        {page === "home" && (
+          <div className="page">
+            <TreePine className="main-icon" />
+            <h1>Porest에 오신 것을 환영합니다</h1>
+            <p>Portfolio + Rest: 당신의 프로젝트를 나무로 키워보세요 🌿</p>
+          </div>
+        )}
+        {page === "dashboard" && (
+          <div className="page">
+            <h1>대시보드</h1>
+          </div>
+        )}
+        {page === "projects" && (
+          <div className="page">
+            <h2>나의 Porest</h2>
+            <p>이곳에서 프로젝트 나무를 관리하세요 🌳</p>
+          </div>
+        )}
+      </main>
     </div>
   );
 }
