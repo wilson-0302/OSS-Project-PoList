@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 import { lazy, Suspense } from "react";
 
-import { Home as HomeIcon, BarChart3, Folder, TreePine, PanelsTopLeft, Menu} from "lucide-react";
+import { Home as HomeIcon, BarChart3, Folder, TreePine, PanelsTopLeft, Menu } from "lucide-react";
 import "./App.css";
 
 const Home = lazy(() => import("./pages/Home"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const PortfolioList = lazy(() => import("./pages/PortfolioList"));
+const PortfolioAdd = lazy(() => import("./pages/PortfolioAdd"));
+const PortfolioDetail = lazy(() => import("./pages/PortfolioDetail"));
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -75,6 +77,8 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/portfolio" element={<PortfolioList />} />
+              <Route path="/portfolio/add" element={<PortfolioAdd />} />
+              <Route path="/portfolio/detail" element={<PortfolioDetail />} />
               <Route
                 path="*"
                 element={<div>페이지를 찾을 수 없습니다 (404)</div>}
