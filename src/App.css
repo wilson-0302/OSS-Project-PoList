@@ -1,41 +1,3 @@
-/* .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-} */
 /* 전체 레이아웃 */
 .app-container {
   display: flex;
@@ -54,18 +16,19 @@
   flex-direction: column;
 }
 
-.sidebar.closed { width: 72px; }
+.sidebar.closed {
+  width: 72px;
+}
 
 /* 헤더(열림) */
 .sidebar-header {
   box-sizing: border-box;
-  height: 56px;               /* ← 헤더 높이 고정(원하면 60px로) */
-  padding: 10px 12px;         /* 좌우 여백 일정하게 */
+  height: 56px;
+  padding: 10px 12px;
   display: flex;
   align-items: center;
   gap: 8px;
 }
-
 
 .logo {
   display: flex;
@@ -74,82 +37,155 @@
   color: #4b6043;
   font-weight: 600;
 }
-.logo-text { line-height: 1; }  /* 폰트 baseline 차이 제거 */
-.logo-icon { width: 20px; height: 20px; }
+
+.logo-text {
+  line-height: 1;
+}
+
+.logo-icon {
+  width: 20px;
+  height: 20px;
+}
 
 .toggle-btn {
-  margin-left: auto;            /* 오른쪽 끝으로 밀기 */
+  margin-left: auto;
   width: 36px;
   height: 36px;
-  padding: 0;                   /* 기본 패딩 제거 */
+  padding: 0;
   color: #4b6043;
   display: inline-grid;
-  place-items: center;          /* 아이콘 정확히 가운데 */
+  place-items: center;
   border: none;
   background: transparent;
   border-radius: 10px;
   cursor: pointer;
-  line-height: 0;               /* 버튼 기본 line-height로 생기는 세로 흔들림 방지 */
+  line-height: 0;
   -webkit-appearance: none;
 }
-.toggle-btn:hover { background: #e7e8e0; }
 
-/* 버튼 안의 아이콘 크기 고정 + 블록화(여백 제거) */
+.toggle-btn:hover {
+  background: #e7e8e0;
+}
+
 .toggle-btn svg {
   width: 22px;
   height: 22px;
-  display: block;               /* inline-svg의 하단 여백 제거 */
+  display: block;
 }
 
-.sidebar { width: 240px; }
-.sidebar.closed { width: 72px; }
+.sidebar {
+  width: 240px;
+}
+
+.sidebar.closed {
+  width: 72px;
+}
 
 /* 닫힘 상태: 트리↔사이드바 아이콘 전환 버튼 */
 .collapsed-trigger {
   position: relative;
-  width: 48px; height: 48px;
+  width: 48px;
+  height: 48px;
   margin: 10px auto;
-  border: none; outline: none; cursor: pointer;
+  border: none;
+  outline: none;
+  cursor: pointer;
   background: transparent;
   border-radius: 12px;
-  display: grid; place-items: center;
+  display: grid;
+  place-items: center;
 }
-.collapsed-trigger:hover { background: #e7e8e0; }
+
+.collapsed-trigger:hover {
+  background: #e7e8e0;
+}
 
 .icon-base {
   position: absolute;
-  width: 22px; height: 22px;
+  width: 22px;
+  height: 22px;
   color: #4b6043;
   transition: opacity 160ms ease, transform 160ms ease;
 }
 
 /* 기본은 트리 보임 */
-.icon-tree { opacity: 1; transform: scale(1); }
+.icon-tree {
+  opacity: 1;
+  transform: scale(1);
+}
+
 /* hover 시 트리는 사라지고 메뉴가 나타남 */
-.collapsed-trigger:hover .icon-tree { opacity: 0; transform: scale(0.85); }
-.icon-menu { opacity: 0; transform: scale(0.85); }
-.collapsed-trigger:hover .icon-menu { opacity: 1; transform: scale(1); }
+.collapsed-trigger:hover .icon-tree {
+  opacity: 0;
+  transform: scale(0.85);
+}
+
+.icon-menu {
+  opacity: 0;
+  transform: scale(0.85);
+}
+
+.collapsed-trigger:hover .icon-menu {
+  opacity: 1;
+  transform: scale(1);
+}
 
 /* 네비게이션 */
-.nav { list-style: none; padding: 8px; margin: 0; }
-.sidebar.closed .nav { display: none; } /* 닫힘 상태에선 완전 숨김 */
-
-.nav li {
-  display: flex; align-items: center; gap: 10px;
-  padding: 10px 12px; cursor: pointer; color: #4b6043;
-  border-radius: 10px; margin: 2px 4px;
-  transition: background-color 0.2s ease;
+.nav {
+  list-style: none;
+  padding: 8px;
+  margin: 0;
 }
-.nav li:hover { background-color: #e7e8e0; }
 
-.icon { width: 20px; height: 20px; }
-.menu-text { white-space: nowrap; }
+.sidebar.closed .nav {
+  display: none;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  color: #4b6043;
+  border-radius: 10px;
+  margin: 2px 4px;
+  transition: background-color 0.2s ease;
+  text-decoration: none;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+.menu-text {
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  background-color: #e7e8e0;
+}
+
 
 /* 메인 */
 .main-content {
-  flex: 1; display: flex; flex-direction: column;
-  justify-content: center; align-items: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background-color: #fafaf7;
 }
-.page { text-align: center; padding: 20px; }
-.main-icon { width: 48px; height: 48px; color: #4b6043; margin-bottom: 10px; }
+
+.page {
+  text-align: center;
+  padding: 20px;
+}
+
+.main-icon {
+  width: 48px;
+  height: 48px;
+  color: #4b6043;
+  margin-bottom: 10px;
+}
