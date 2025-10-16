@@ -13,7 +13,6 @@ const PortfolioDetail = lazy(() => import("./pages/PortfolioDetail"));
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [page, setPage] = useState("home");
 
   const toggleSidebar = () => setSidebarOpen((v) => !v);
 
