@@ -1,0 +1,29 @@
+/* 전체 레이아웃 */
+.app-container {
+  display: flex;
+  height: 100vh;
+  background-color: #f9f9f6;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+/* 메인 */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fafaf7;
+}
+
+.page {
+  text-align: center;
+  padding: 20px;
+}
+
+.main-icon {
+  width: 48px;
+  height: 48px;
+  color: #4b6043;
+  margin-bottom: 10px;
+}

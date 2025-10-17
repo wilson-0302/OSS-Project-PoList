@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { supabase } from "./supabase";
 
-import Landing from "./pages/Main";
-import Board from "./pages/Home";
+import Landing from "./pages/landing/Landing";
+import Board from "./pages/layout/Layout";
 
 function App() {
   const [session, setSession] = useState(null);
@@ -28,6 +28,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* porest로 접근 -> porest/ko */}
+        <Route path="/porest" element={<Navigate to="/porest/ko" replace />} />
+        
         {/* 누구나 접근 가능 (로그인 전/후 모두 가능) */}
         <Route path="/porest/ko" element={<Landing session={session} />} />
 
