@@ -1,9 +1,3 @@
-// export default function PortfolioAdd() {
-//     return (
-//         <h1>PortfolioAdd</h1>
-//     );
-// }
-
 import { useNavigate, useLocation } from "react-router-dom";
 
 export default function PortfolioAdd() {
@@ -23,7 +17,7 @@ export default function PortfolioAdd() {
           <button onClick={() => navigate(-1)}>❌ 닫기</button>
           <button
             style={{ marginLeft: "8px" }}
-            onClick={() => navigate("/portfolio/add", { replace: true })}
+            onClick={() => navigate("/porest/so/portfolio/add", { replace: true })}
           >
             🔲 전체화면으로 보기
           </button>

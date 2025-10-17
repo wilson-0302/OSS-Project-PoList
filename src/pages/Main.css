@@ -1,0 +1,99 @@
+/* 전체 컨테이너 */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f9f9f6;
+  font-family: "Noto Sans KR", sans-serif;
+  color: #4b6043;
+}
+
+/* === 헤더 === */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 36px;
+  border-bottom: 1px solid #e0e0d8;
+  background-color: #f5f6f1;
+}
+
+.main-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: #4b6043;
+}
+
+.main-logo-icon {
+  width: 24px;
+  height: 24px;
+  color: #4b6043;
+}
+
+/* 로그인 버튼 */
+.main-login-btn {
+  background-color: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.main-login-btn:hover {
+  background-color: #357ae8;
+}
+
+/* === 메인 === */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.main-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 10px;
+}
+
+.main-subtitle {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 0;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .main-header {
+    padding: 12px 20px;
+  }
+
+  .main-logo-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .main-title {
+    font-size: 1.8rem;
+  }
+
+  .main-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .main-login-btn {
+    padding: 5px 12px;
+    font-size: 0.8rem;
+  }
+}

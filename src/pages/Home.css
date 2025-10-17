@@ -1,0 +1,191 @@
+/* 전체 레이아웃 */
+.app-container {
+  display: flex;
+  height: 100vh;
+  background-color: #f9f9f6;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+/* === 사이드바 === */
+.sidebar {
+  background-color: #f5f6f1;
+  width: 240px;
+  transition: all 0.25s ease;
+  border-right: 1px solid #e0e0d8;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.closed {
+  width: 72px;
+}
+
+/* 헤더(열림) */
+.sidebar-header {
+  box-sizing: border-box;
+  height: 56px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4b6043;
+  font-weight: 600;
+}
+
+.logo-text {
+  line-height: 1;
+}
+
+.logo-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.toggle-btn {
+  margin-left: auto;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  color: #4b6043;
+  display: inline-grid;
+  place-items: center;
+  border: none;
+  background: transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  line-height: 0;
+  -webkit-appearance: none;
+}
+
+.toggle-btn:hover {
+  background: #e7e8e0;
+}
+
+.toggle-btn svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.sidebar {
+  width: 240px;
+}
+
+.sidebar.closed {
+  width: 72px;
+}
+
+/* 닫힘 상태: 트리↔사이드바 아이콘 전환 버튼 */
+.collapsed-trigger {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  margin: 10px auto;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: transparent;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+}
+
+.collapsed-trigger:hover {
+  background: #e7e8e0;
+}
+
+.icon-base {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  color: #4b6043;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+/* 기본은 트리 보임 */
+.icon-tree {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* hover 시 트리는 사라지고 메뉴가 나타남 */
+.collapsed-trigger:hover .icon-tree {
+  opacity: 0;
+  transform: scale(0.85);
+}
+
+.icon-menu {
+  opacity: 0;
+  transform: scale(0.85);
+}
+
+.collapsed-trigger:hover .icon-menu {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 네비게이션 */
+.nav {
+  list-style: none;
+  padding: 8px;
+  margin: 0;
+}
+
+.sidebar.closed .nav {
+  display: none;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  color: #4b6043;
+  border-radius: 10px;
+  margin: 2px 4px;
+  transition: background-color 0.2s ease;
+  text-decoration: none;
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+}
+
+.menu-text {
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  background-color: #e7e8e0;
+}
+
+
+/* 메인 */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #fafaf7;
+}
+
+.page {
+  text-align: center;
+  padding: 20px;
+}
+
+.main-icon {
+  width: 48px;
+  height: 48px;
+  color: #4b6043;
+  margin-bottom: 10px;
+}
