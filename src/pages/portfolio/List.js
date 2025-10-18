@@ -68,7 +68,6 @@ export default function PortfolioList() {
         <button onClick={() => navigate("add", { state: { background: location } })}>
           ➕ 새 포트폴리오 추가
         </button>
-        <button onClick={() => navigate("detail")}>🔍 포트폴리오 상세보기</button>
       </div>
 
       <div className="project-grid">
