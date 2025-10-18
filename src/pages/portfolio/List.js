@@ -1,17 +1,14 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "../../supabase";
-
-
+import "./List.css";
 
 export default function PortfolioList() {
   const navigate = useNavigate();
   const location = useLocation();
-
   const [projects, setProjects] = useState([]);
   const [user, setUser] = useState(null);
 
-  // 로그인된 사용자 정보 가져오기
   useEffect(() => {
     async function fetchUser() {
       const { data } = await supabase.auth.getUser();
@@ -20,8 +17,6 @@ export default function PortfolioList() {
     fetchUser();
   }, []);
 
-
-  // Read: 내 프로젝트 목록 가져오기
   async function fetchProjects() {
     if (!user) return;
     const { data, error } = await supabase
@@ -34,91 +29,87 @@ export default function PortfolioList() {
     else setProjects(data);
   }
 
-
-  // Update: 프로젝트 제목 수정
   async function updateProject(id, newTitle) {
     const { error } = await supabase
       .from("projects")
       .update({ title: newTitle, updated_at: new Date().toISOString() })
       .eq("id", id)
-      .eq("user_id", user.id); // 본인 것만 수정
-
+      .eq("user_id", user.id);
     if (error) console.error(error);
     else fetchProjects();
   }
 
-  // Delete: 프로젝트 삭제
   async function deleteProject(id) {
     const { error } = await supabase
       .from("projects")
       .delete()
       .eq("id", id)
       .eq("user_id", user.id);
-
     if (error) console.error(error);
     else fetchProjects();
   }
 
-
   useEffect(() => {
     if (!user) return;
-    fetchProjects(); // 최초 로드
-
-    // 실시간 변경 감지
+    fetchProjects();
     const channel = supabase
-      .channel('projects-list')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'projects' },
-        payload => {
-          console.log("리스트 감지됨:", payload);
-          fetchProjects(); // 변경 시 다시 불러오기
-        }
-      )
+      .channel("projects-list")
+      .on("postgres_changes", { event: "*", schema: "public", table: "projects" }, () => fetchProjects())
       .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    return () => supabase.removeChannel(channel);
   }, [user]);
-
 
   return (
     <div className="page">
       <h1>나의 Porest</h1>
       <p>당신의 포트폴리오 나무를 관리하세요 🌳</p>
 
-      {/* location을 state로 함께 전달 */}
-      <button
-        onClick={() =>
-          navigate("add", { state: { background: location } })
-        }
-      >
-        ➕ 새 포트폴리오 추가
-      </button>
+      <div className="actions">
+        <button onClick={() => navigate("add", { state: { background: location } })}>
+          ➕ 새 포트폴리오 추가
+        </button>
+        <button onClick={() => navigate("detail")}>🔍 포트폴리오 상세보기</button>
+      </div>
 
-      {/* 상세 페이지도 동일하게 */}
-      <button
-        onClick={() => navigate("detail")} // state 제거
-        style={{ marginLeft: "10px" }}
-      >
-        🔍 포트폴리오 상세보기
-      </button>
-
-      {/* 포트폴리오 리스트 */}
-      <ul>
+      <div className="project-grid">
         {projects.map((p) => (
-          <li key={p.id}>
-            <b>{p.title}</b> ({p.state})
-            <button onClick={() => updateProject(p.id, p.title + " (수정됨)")}>
-              ✏️ 수정
-            </button>
-            <button onClick={() => deleteProject(p.id)}>🗑️ 삭제</button>
-          </li>
+          <div
+            key={p.id}
+            className="project-card"
+            onClick={() => navigate(`detail/${p.id}`)} // 상세페이지로 이동
+            style={{ cursor: "pointer" }}
+          >
+            <div className="project-thumb">
+              {/* 이미지가 있으면 표시, 없으면 흰색 박스 */}
+              {p.img ? (
+                <img src={p.img} alt={p.title} />
+              ) : (
+                <div
+                  style={{
+                    width: "100%",
+                    height: "240px",
+                    backgroundColor: "#fff",
+                    borderRadius: "8px",
+                  }}
+                ></div>
+              )}
+            </div>
+            <div className="project-info">
+              <h3>{p.title}</h3>
+              <div className="project-meta">
+                <span className={`state ${p.state === "완료" ? "done" : "progress"}`}>
+                  {p.state}
+                </span>
+                <span className="tech">{p.tech_stack}</span>
+              </div>
+            </div>
+            <div className="project-buttons">
+              <button onClick={() => updateProject(p.id, p.title + " (수정됨)")}>✏️ 수정</button>
+              <button onClick={() => deleteProject(p.id)}>🗑️ 삭제</button>
+            </div>
+          </div>
         ))}
-      </ul>
-
-
+      </div>
     </div>
   );
 }

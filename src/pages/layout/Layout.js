@@ -30,7 +30,9 @@ function Board() {
             <Route index element={<Home />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="portfolio" element={<PortfolioList />} />
-            <Route path="portfolio/detail" element={<PortfolioDetail />} />
+            {/* <Route path="portfolio/detail" element={<PortfolioDetail />} /> */}
+            <Route path="portfolio/detail/:id" element={<PortfolioDetail />} />
+
             <Route path="portfolio/add" element={<PortfolioAdd />} />
           </Routes>
 
