@@ -37,33 +37,90 @@ export default function PortfolioAdd() {
   }
 
   // ✅ Create: 새 프로젝트 추가
+  // async function addProject() {
+  //   if (!user) return alert("로그인 필요!");
+  //   if (!title) return alert("제목을 입력하세요!");
+
+  //   const { error } = await supabase.from("projects").insert([
+  //     {
+  //       title,
+  //       user_id: user.id, // 👈 로그인 사용자 연결
+  //       state: "진행중",
+  //       start_at: "2025-01-01",
+  //       end_at: "2025-03-01",
+  //       tech_stack: "React, Node.js",
+  //       content: "간단한 포트폴리오 프로젝트입니다.",
+  //       depo: "없음",
+  //       depo_content: "없음",
+  //       // github_url: "https://github.com/example",
+  //       github_url,
+  //     },
+  //   ]);
+
+  //   // if (error) console.error(error);
+  //   // else {
+  //   //   setTitle("");
+  //   //   setGithub_url("");
+  //   //   fetchProjects();
+  //   // }
+  //   if (error) {
+  //     console.error(error);
+  //     alert("프로젝트 추가 실패 😢");
+  //   } else {
+  //     // ✅ 입력 초기화
+  //     setTitle("");
+  //     setGithub_url("");
+
+  //     // ✅ 모달 모드라면 닫기 / 전체화면이라면 리스트로 이동
+  //     if (isModal) {
+  //       navigate(-1); // 모달 닫기
+  //     } else {
+  //       navigate("/porest/so/portfolio"); // 리스트로 이동
+  //     }
+  //   }
+  // }
+
+
   async function addProject() {
-    if (!user) return alert("로그인 필요!");
-    if (!title) return alert("제목을 입력하세요!");
+  if (!user) return alert("로그인 필요!");
+  if (!title) return alert("제목을 입력하세요!");
 
-    const { error } = await supabase.from("projects").insert([
-      {
-        title,
-        user_id: user.id, // 👈 로그인 사용자 연결
-        state: "진행중",
-        start_at: "2025-01-01",
-        end_at: "2025-03-01",
-        tech_stack: "React, Node.js",
-        content: "간단한 포트폴리오 프로젝트입니다.",
-        depo: "없음",
-        depo_content: "없음",
-        // github_url: "https://github.com/example",
-        github_url,
-      },
-    ]);
+  const { error } = await supabase.from("projects").insert([
+    {
+      title,
+      user_id: user.id, // 👈 로그인 사용자 연결
+      state: "진행중",
+      start_at: "2025-01-01",
+      end_at: "2025-03-01",
+      tech_stack: "React, Node.js",
+      content: "간단한 포트폴리오 프로젝트입니다.",
+      depo: "없음",
+      depo_content: "없음",
+      github_url,
+    },
+  ]);
 
-    if (error) console.error(error);
-    else {
-      setTitle("");
-      setGithub_url("");
-      fetchProjects();
+  if (error) {
+    console.error(error);
+    alert("프로젝트 추가 실패 😢");
+  } else {
+    // ✅ 입력 초기화
+    setTitle("");
+    setGithub_url("");
+
+    // ✅ 리스트 즉시 반영 (Realtime 느릴 때 대비)
+    await fetchProjects();
+
+    // ✅ 모달 / 전체화면 구분 이동
+    if (isModal) {
+      navigate(-1); // 모달 닫기
+    } else {
+      navigate("/porest/so/portfolio"); // 리스트로 이동
     }
   }
+}
+
+
 
   // ✅ Update: 프로젝트 제목 수정
   async function updateProject(id, newTitle) {
@@ -90,9 +147,34 @@ export default function PortfolioAdd() {
   }
 
   // 첫 렌더링 시 데이터 불러오기
-  useEffect(() => {
-    if (user) fetchProjects();
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) fetchProjects();
+  // }, [user]);
+
+
+  // useEffect(() => {
+  //   if (!user) return;
+
+  //   // ✅ 초기 데이터 로드
+  // fetchProjects();
+
+  //   // ✅ 프로젝트 변경 감지
+  //   const channel = supabase
+  //     .channel('projects-changes')
+  //     .on('postgres_changes', { event: '*', schema: 'public', table: 'projects' }, payload => {
+  //       console.log("변경 감지:", payload);
+  //       fetchProjects(); // 변경 감지되면 목록 갱신
+  //     })
+  //     .subscribe();
+
+  //   // ✅ 초기 데이터 로드
+  //   fetchProjects();
+
+  //   // ✅ cleanup
+  //   return () => {
+  //     supabase.removeChannel(channel);
+  //   };
+  // }, [user]);
 
 
   return (

@@ -61,9 +61,31 @@ export default function PortfolioList() {
   }
 
   // 첫 렌더링 시 데이터 불러오기
-  useEffect(() => {
-    if (user) fetchProjects();
-  }, [user]);
+//   useEffect(() => {
+//     if (user) fetchProjects();
+//   }, [user]);
+useEffect(() => {
+  if (!user) return;
+
+  fetchProjects(); // 최초 로드
+
+  // ✅ 실시간 변경 감지
+  const channel = supabase
+    .channel('projects-list')
+    .on(
+      'postgres_changes',
+      { event: '*', schema: 'public', table: 'projects' },
+      payload => {
+        console.log("리스트 감지됨:", payload);
+        fetchProjects(); // 변경 시 다시 불러오기
+      }
+    )
+    .subscribe();
+
+  return () => {
+    supabase.removeChannel(channel);
+  };
+}, [user]);
 
 
 
