@@ -14,7 +14,7 @@ export default function PortfolioAdd() {
   // state가 있으면 모달 모드, 없으면 전체화면 모드
   const isModal = !!location.state;
 
-  // ✅ 로그인된 사용자 정보 가져오기
+  // 로그인된 사용자 정보 가져오기
   useEffect(() => {
     async function fetchUser() {
       const { data } = await supabase.auth.getUser();
@@ -23,7 +23,7 @@ export default function PortfolioAdd() {
     fetchUser();
   }, []);
 
-  // ✅ Read: 내 프로젝트 목록 가져오기
+  // Read: 내 프로젝트 목록 가져오기
   async function fetchProjects() {
     if (!user) return;
     const { data, error } = await supabase
@@ -36,51 +36,6 @@ export default function PortfolioAdd() {
     else setProjects(data);
   }
 
-  // ✅ Create: 새 프로젝트 추가
-  // async function addProject() {
-  //   if (!user) return alert("로그인 필요!");
-  //   if (!title) return alert("제목을 입력하세요!");
-
-  //   const { error } = await supabase.from("projects").insert([
-  //     {
-  //       title,
-  //       user_id: user.id, // 👈 로그인 사용자 연결
-  //       state: "진행중",
-  //       start_at: "2025-01-01",
-  //       end_at: "2025-03-01",
-  //       tech_stack: "React, Node.js",
-  //       content: "간단한 포트폴리오 프로젝트입니다.",
-  //       depo: "없음",
-  //       depo_content: "없음",
-  //       // github_url: "https://github.com/example",
-  //       github_url,
-  //     },
-  //   ]);
-
-  //   // if (error) console.error(error);
-  //   // else {
-  //   //   setTitle("");
-  //   //   setGithub_url("");
-  //   //   fetchProjects();
-  //   // }
-  //   if (error) {
-  //     console.error(error);
-  //     alert("프로젝트 추가 실패 😢");
-  //   } else {
-  //     // ✅ 입력 초기화
-  //     setTitle("");
-  //     setGithub_url("");
-
-  //     // ✅ 모달 모드라면 닫기 / 전체화면이라면 리스트로 이동
-  //     if (isModal) {
-  //       navigate(-1); // 모달 닫기
-  //     } else {
-  //       navigate("/porest/so/portfolio"); // 리스트로 이동
-  //     }
-  //   }
-  // }
-
-
   async function addProject() {
   if (!user) return alert("로그인 필요!");
   if (!title) return alert("제목을 입력하세요!");
@@ -88,7 +43,7 @@ export default function PortfolioAdd() {
   const { error } = await supabase.from("projects").insert([
     {
       title,
-      user_id: user.id, // 👈 로그인 사용자 연결
+      user_id: user.id, // 로그인 사용자 연결
       state: "진행중",
       start_at: "2025-01-01",
       end_at: "2025-03-01",

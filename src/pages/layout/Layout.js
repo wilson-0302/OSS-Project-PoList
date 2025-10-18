@@ -8,9 +8,9 @@ import "./Layout.css";
 
 const Home = lazy(() => import("../home/Home"));
 const Dashboard = lazy(() => import("../dashboard/Dashboard"));
-const PortfolioList = lazy(() => import("../portfolio/List"));
-const PortfolioAdd = lazy(() => import("../portfolio/Add"));
-const PortfolioDetail = lazy(() => import("../portfolio/Detail"));
+const PortfolioList = lazy(() => import("../Portfolio_temp/List"));
+const PortfolioAdd = lazy(() => import("../Portfolio_temp/Add"));
+const PortfolioDetail = lazy(() => import("../Portfolio_temp/Detail"));
 
 function Board() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
