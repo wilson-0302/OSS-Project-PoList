@@ -5,7 +5,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./ui/tooltip";
+} from "../../components/ui/tooltip";
 
 export function GitHubContributions({ commits, startDate }) {
   const weeks = useMemo(() => groupCommitsByWeek(commits, startDate), [commits, startDate]);
