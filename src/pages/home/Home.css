@@ -1,0 +1,69 @@
+/* src/pages/home/Home.css */
+
+/* * .page는 Layout.js (Board)에 의해 렌더링되는 컨테이너입니다.
+ * 홈 화면 전체를 수직 중앙에 배치하고 텍스트를 중앙 정렬합니다.
+ */
+
+ 
+.page {
+  /* Layout.js의 main-content에 높이가 100%여야 중앙 정렬이 잘 동작합니다. */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 수평 중앙 정렬 */
+  justify-content: flex-start; /* 내용을 상단부터 배치 (스크롤링 방지) */
+  text-align: center;
+  background-color: var(--background); /* 전역 배경색 사용 */
+  color: var(--foreground); /* 전역 텍스트 색상 사용 */
+  padding-top: 40px; /* 상단 여백 추가 */
+}
+
+/* Home.js의 최상위 <h1>에 사용된 클래스 (기존 CSS와 충돌 방지) */
+.page h1 {
+  font-size: 2.25rem; /* Tailwind h1(3xl) */
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+/* .page p 태그 스타일 */
+.page p {
+  color: var(--muted-foreground);
+  font-size: 1rem;
+}
+
+/* 카드 섹션 */
+.max-w-6xl.mx-auto {
+  width: 100%;
+  max-width: 72rem; /* Tailwind max-w-6xl */
+}
+
+/* 카드 헤더 타이틀 */
+.text-sm.font-medium {
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+/* 통계 숫자 */
+.text-2xl.font-bold {
+  font-size: 1.5rem; /* Tailwind text-2xl */
+  font-weight: 700;
+  color: var(--foreground);
+}
+
+/* 시작 가이드 섹션의 아이콘 배경 스타일 */
+.flex.h-8.w-8.shrink-0.items-center.justify-center.rounded-lg.bg-primary.text-primary-foreground {
+  /*
+   * Tailwind 클래스가 이미 적용되어 있지만, 
+   * 혹시 모를 대비를 위해 색상 변수만 확인합니다.
+   * 이 스타일은 shadcn/ui의 Card 컴포넌트에 의해 자동으로 관리됩니다.
+   */
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+/* 빠른 작업 버튼 스타일 조정 (tailwind 클래스를 덮어씁니다) */
+.w-full.mt-2 {
+    /* 버튼이 화면에 꽉 차게 보이도록 설정 */
+    display: block; 
+    margin-top: 0.5rem;
+}
