@@ -10,6 +10,7 @@ export default function PortfolioAdd() {
   const [projects, setProjects] = useState([]);
   const [user, setUser] = useState(null);
 
+  // 기본 필드
   const [title, setTitle] = useState("");
   const [github_url, setGithub_url] = useState("");
   const [stateText, setStateText] = useState("진행중");
@@ -21,8 +22,12 @@ export default function PortfolioAdd() {
   const [depo, setDepo] = useState("없음");
   const [depo_content, setDepo_content] = useState("없음");
 
+  // 멤버 리스트 (이름 / 역할)
+  const [members, setMembers] = useState([{ name: "", role: "" }]);
+
   const isModal = !!location.state;
 
+  // 로그인 사용자 불러오기
   useEffect(() => {
     async function fetchUser() {
       const { data } = await supabase.auth.getUser();
@@ -43,21 +48,20 @@ export default function PortfolioAdd() {
     else setProjects(data);
   }
 
+  // 프로젝트 생성 함수
   async function addProject() {
     if (!user) return alert("로그인 필요!");
     if (!title) return alert("제목을 입력하세요!");
 
     let imgUrl = null;
 
-
-    // 이미지 업로드 (Supabase Storage)
+    // 이미지 업로드
     if (img) {
       const fileExt = img.name.split(".").pop();
       const fileName = `${user.id}_${Date.now()}.${fileExt}`;
 
-      // 파일 업로드
       const { error: uploadError } = await supabase.storage
-        .from("project-images") // 버킷 이름 (미리 생성해야 함)
+        .from("project-images")
         .upload(fileName, img);
 
       if (uploadError) {
@@ -66,51 +70,85 @@ export default function PortfolioAdd() {
         return;
       }
 
-      // Public URL 가져오기
       const { data: publicUrlData } = supabase.storage
         .from("project-images")
         .getPublicUrl(fileName);
 
-      imgUrl = publicUrlData.publicUrl; // URL 저장
+      imgUrl = publicUrlData.publicUrl;
     }
 
-    const { error } = await supabase.from("projects").insert([
-      {
-        title,
-        user_id: user.id,
-        state: stateText,
-        start_at,
-        end_at,
-        tech_stack,
-        content,
-        depo,
-        depo_content,
-        github_url,
-        img: imgUrl,
-      },
-    ]);
+    // projects 테이블에 추가
+    const { data: newProject, error } = await supabase
+      .from("projects")
+      .insert([
+        {
+          title,
+          user_id: user.id,
+          state: stateText,
+          start_at,
+          end_at,
+          tech_stack,
+          content,
+          depo,
+          depo_content,
+          github_url,
+          img: imgUrl,
+        },
+      ])
+      .select()
+      .single();
 
-    if (error) {
+    if (error || !newProject) {
       console.error(error);
-      const { data: userData } = await supabase.auth.getUser();
-      console.log("현재 로그인 사용자:", userData);
       alert("프로젝트 추가 실패");
-    } else {
-      setTitle("");
-      setGithub_url("");
-      setStateText("진행중");
-      setStart_at("2025-01-01");
-      setEnd_at("2025-03-01");
-      setTech_stack("React, Node.js");
-      setContent("간단한 포트폴리오 프로젝트입니다.");
-      setDepo("없음");
-      setDepo_content("없음");
-
-      await fetchProjects();
-
-      if (isModal) navigate(-1);
-      else navigate("/porest/so/portfolio");
+      return;
     }
+
+    // 멤버들만 추가 (Owner 자동 추가 제거)
+    for (const m of members) {
+      if (!m.name.trim()) continue;
+      await supabase.from("project_members").insert([
+        {
+          project_id: newProject.id,
+          name: m.name,
+          role: m.role || "Member",
+        },
+      ]);
+    }
+
+    alert("프로젝트 및 멤버 추가 완료!");
+
+    // 폼 초기화
+    setTitle("");
+    setGithub_url("");
+    setStateText("진행중");
+    setStart_at("2025-01-01");
+    setEnd_at("2025-03-01");
+    setTech_stack("React, Node.js");
+    setContent("간단한 포트폴리오 프로젝트입니다.");
+    setDepo("없음");
+    setDepo_content("없음");
+    setMembers([{ name: "", role: "" }]);
+
+    await fetchProjects();
+
+    if (isModal) navigate(-1);
+    else navigate("/porest/so/portfolio");
+  }
+
+  // 멤버 입력창 관리
+  function addMemberField() {
+    setMembers([...members, { name: "", role: "" }]);
+  }
+
+  function updateMember(index, field, value) {
+    const updated = [...members];
+    updated[index][field] = value;
+    setMembers(updated);
+  }
+
+  function removeMemberField(index) {
+    setMembers(members.filter((_, i) => i !== index));
   }
 
   return (
@@ -119,7 +157,7 @@ export default function PortfolioAdd() {
       <p className="add-desc">아래 항목을 입력해주세요.</p>
 
       <div className="form-wrapper">
-        <label className="add-label">프로젝트 제목</label>
+        <label>프로젝트 제목</label>
         <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="예: 개인 포트폴리오 웹" />
 
         <label>깃허브 링크</label>
@@ -138,11 +176,7 @@ export default function PortfolioAdd() {
         <input value={tech_stack} onChange={(e) => setTech_stack(e.target.value)} placeholder="React, Node.js 등" />
 
         <label>대표 이미지</label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setImg(e.target.files[0])}
-        />
+        <input type="file" accept="image/*" onChange={(e) => setImg(e.target.files[0])} />
         {img && (
           <img
             src={URL.createObjectURL(img)}
@@ -152,7 +186,11 @@ export default function PortfolioAdd() {
         )}
 
         <label>프로젝트 내용</label>
-        <textarea value={content} onChange={(e) => setContent(e.target.value)} placeholder="프로젝트에 대한 설명을 입력하세요." />
+        <textarea
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="프로젝트에 대한 설명을 입력하세요."
+        />
 
         <label>담당 역할</label>
         <input value={depo} onChange={(e) => setDepo(e.target.value)} placeholder="예: 프론트엔드 개발" />
@@ -164,7 +202,61 @@ export default function PortfolioAdd() {
           placeholder="담당한 역할에 대해 자세히 적어주세요."
         />
 
-        <button className="add-btn" onClick={addProject}>프로젝트 추가</button>
+        {/* 멤버 추가 섹션 */}
+        <label>프로젝트 멤버 추가</label>
+        {members.map((m, index) => (
+          <div key={index} style={{ display: "flex", flexDirection: "column", marginBottom: "10px" }}>
+            <input
+              type="text"
+              placeholder="이름"
+              value={m.name}
+              onChange={(e) => updateMember(index, "name", e.target.value)}
+              style={{ marginBottom: "6px" }}
+            />
+            <input
+              type="text"
+              placeholder="역할 (예: 프론트엔드, 백엔드 등)"
+              value={m.role}
+              onChange={(e) => updateMember(index, "role", e.target.value)}
+            />
+            {members.length > 1 && (
+              <button
+                type="button"
+                onClick={() => removeMemberField(index)}
+                style={{
+                  marginTop: "6px",
+                  alignSelf: "flex-start",
+                  background: "#f5f0f0",
+                  border: "none",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  padding: "6px 8px",
+                }}
+              >
+                ❌ 삭제
+              </button>
+            )}
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={addMemberField}
+          style={{
+            background: "#e7e8e0",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+            padding: "8px 12px",
+            marginBottom: "12px",
+          }}
+        >
+          ➕ 멤버 추가
+        </button>
+        <br />
+
+        <button className="add-btn" onClick={addProject}>
+          프로젝트 추가
+        </button>
       </div>
 
       {isModal ? (
