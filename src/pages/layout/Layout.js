@@ -11,6 +11,7 @@ const Dashboard = lazy(() => import("../dashboard/Dashboard"));
 const PortfolioList = lazy(() => import("../portfolio/List"));
 const PortfolioAdd = lazy(() => import("../portfolio/Add"));
 const PortfolioDetail = lazy(() => import("../portfolio/Detail"));
+const EditPage = lazy(() => import("../portfolio/Edit"));
 
 function Board() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -30,10 +31,9 @@ function Board() {
             <Route index element={<Home />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="portfolio" element={<PortfolioList />} />
-            {/* <Route path="portfolio/detail" element={<PortfolioDetail />} /> */}
             <Route path="portfolio/detail/:id" element={<PortfolioDetail />} />
-
             <Route path="portfolio/add" element={<PortfolioAdd />} />
+            <Route path="portfolio/edit/:id" element={<EditPage />} />
           </Routes>
 
           {background && (

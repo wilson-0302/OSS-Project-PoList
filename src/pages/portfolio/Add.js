@@ -10,7 +10,6 @@ export default function PortfolioAdd() {
   const [projects, setProjects] = useState([]);
   const [user, setUser] = useState(null);
 
-  // 입력값 state
   const [title, setTitle] = useState("");
   const [github_url, setGithub_url] = useState("");
   const [stateText, setStateText] = useState("진행중");

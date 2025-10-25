@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { supabase } from "../../supabase";
 import "./List.css";
 
@@ -17,7 +17,7 @@ export default function PortfolioList() {
     fetchUser();
   }, []);
 
-  async function fetchProjects() {
+  const fetchProjects = useCallback(async () => {
     if (!user) return;
     const { data, error } = await supabase
       .from("projects")
@@ -27,26 +27,24 @@ export default function PortfolioList() {
 
     if (error) console.error(error);
     else setProjects(data);
-  }
-
-  async function updateProject(id, newTitle) {
-    const { error } = await supabase
-      .from("projects")
-      .update({ title: newTitle, updated_at: new Date().toISOString() })
-      .eq("id", id)
-      .eq("user_id", user.id);
-    if (error) console.error(error);
-    else fetchProjects();
-  }
+  }, [user]);
 
   async function deleteProject(id) {
+    if (!window.confirm("정말 이 프로젝트를 삭제하시겠습니까?")) return;
+
     const { error } = await supabase
       .from("projects")
       .delete()
       .eq("id", id)
       .eq("user_id", user.id);
-    if (error) console.error(error);
-    else fetchProjects();
+
+    if (error) {
+      console.error(error);
+      alert("삭제 실패");
+    } else {
+      alert("삭제 완료되었습니다");
+      fetchProjects();
+    }
   }
 
   useEffect(() => {
@@ -57,7 +55,7 @@ export default function PortfolioList() {
       .on("postgres_changes", { event: "*", schema: "public", table: "projects" }, () => fetchProjects())
       .subscribe();
     return () => supabase.removeChannel(channel);
-  }, [user]);
+  }, [user, fetchProjects]);
 
   return (
     <div className="page">
@@ -75,11 +73,10 @@ export default function PortfolioList() {
           <div
             key={p.id}
             className="project-card"
-            onClick={() => navigate(`detail/${p.id}`)} // 상세페이지로 이동
+            onClick={() => navigate(`detail/${p.id}`)}
             style={{ cursor: "pointer" }}
           >
             <div className="project-thumb">
-              {/* 이미지가 있으면 표시, 없으면 흰색 박스 */}
               {p.img ? (
                 <img src={p.img} alt={p.title} />
               ) : (
@@ -93,6 +90,7 @@ export default function PortfolioList() {
                 ></div>
               )}
             </div>
+
             <div className="project-info">
               <h3>{p.title}</h3>
               <div className="project-meta">
@@ -102,9 +100,26 @@ export default function PortfolioList() {
                 <span className="tech">{p.tech_stack}</span>
               </div>
             </div>
+
             <div className="project-buttons">
-              <button onClick={() => updateProject(p.id, p.title + " (수정됨)")}>✏️ 수정</button>
-              <button onClick={() => deleteProject(p.id)}>🗑️ 삭제</button>
+              {/* 카드 클릭 이벤트 방지 */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`edit/${p.id}`); // 수정 페이지로 이동
+                }}
+              >
+                ✏️ 수정
+              </button>
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deleteProject(p.id); // 삭제 시 confirm 띄움
+                }}
+              >
+                🗑️ 삭제
+              </button>
             </div>
           </div>
         ))}
