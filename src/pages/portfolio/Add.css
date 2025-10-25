@@ -49,7 +49,8 @@
 }
 
 input,
-textarea {
+textarea,
+select {
   width: 100%;
   padding: 12px 14px;
   margin-bottom: 6px;
@@ -69,7 +70,8 @@ textarea::placeholder {
 }
 
 input:focus,
-textarea:focus {
+textarea:focus,
+select:focus {
   outline: none;
   border-color: #b4bea5;
   box-shadow: 0 0 0 3px rgba(75, 96, 67, 0.15);
@@ -169,4 +171,60 @@ textarea:focus {
 }
 .back-btn:hover {
   background-color: #dcded4;
+}
+
+.commit-fetch-btn {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #e7e8e0; 
+  border: 1px solid #dcded4; 
+  border-radius: 10px; 
+  color: #4b6043; 
+  cursor: pointer;
+  font-size: 15px; 
+  font-weight: 600; 
+  white-space: nowrap;
+  transition: background-color 0.25s ease; 
+}
+
+.commit-fetch-btn:hover:not(:disabled) {
+  background-color: #dcded4; 
+}
+
+.commit-fetch-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 로딩 아이콘 애니메이션 (lucide-react 기본 사용 시 불필요할 수 있음) */
+.commit-fetch-btn .animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 추가: GitHub 링크와 버튼 사이 간격 */
+.form-wrapper label:has(+ div > input[placeholder*="github"]) + div {
+  display: flex;
+  gap: 8px; /* 입력창과 버튼 사이 간격 */
+  align-items: center;
+}
+
+.form-wrapper label:has(+ div > input[placeholder*="github"]) + div > input {
+  flex-grow: 1; /* 입력창이 남는 공간 차지 */
+}
+
+.form-wrapper label:has(+ div > input[placeholder*="github"]) + div > button {
+  flex-shrink: 0; /* 버튼 크기 유지 */
+}
+
+/* 추가: 커밋 성공 메시지 스타일 */
+.commit-success-msg {
+  font-size: 0.8rem;
+  color: #28a745; /* 녹색 */
+  margin-top: 4px;
 }

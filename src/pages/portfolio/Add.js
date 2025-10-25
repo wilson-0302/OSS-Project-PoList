@@ -1,6 +1,9 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "../../supabase";
+import { fetchGitHubCommits } from "../../utils/github"; // ✅ 1. github 유틸리티 import
+import { toast } from "sonner"; // ✅ 2. 알림 라이브러리 import (설치 필요: npm install sonner)
+import { Loader2 } from "lucide-react"; // ✅ 3. 로딩 아이콘 import (설치 필요: npm install lucide-react)
 import "./Add.css";
 
 export default function PortfolioAdd() {
@@ -25,7 +28,18 @@ export default function PortfolioAdd() {
   // 멤버 리스트 (이름 / 역할)
   const [members, setMembers] = useState([{ name: "", role: "" }]);
 
+  // ✅ 4. 커밋 데이터와 로딩 상태 추가
+  const [commit_data, setCommit_data] = useState(null); // 커밋 데이터 저장 (jsonb)
+  const [isLoadingCommits, setIsLoadingCommits] = useState(false); // 커밋 로딩 상태
+
   const isModal = !!location.state;
+
+  const SEASON_OPTIONS = [
+    { value: "🌱 봄 (개발 중)", label: "봄 (개발 중)" },
+    { value: "🌿 여름 (배포 초기)", label: "여름 (배포 초기)" },
+    { value: "🍂 가을 (유지보수 중)", label: "가을 (유지보수 중)" },
+    { value: "❄️ 겨울 (배포 종료)", label: "겨울 (배포 종료)" },
+  ];
 
   // 로그인 사용자 불러오기
   useEffect(() => {
@@ -46,6 +60,28 @@ export default function PortfolioAdd() {
 
     if (error) console.error(error);
     else setProjects(data);
+  }
+
+  // ✅ 5. 커밋 가져오기 함수
+  async function handleFetchCommits() {
+    if (!github_url) {
+      toast.error("GitHub 링크를 먼저 입력해주세요");
+      return;
+    }
+
+    setIsLoadingCommits(true);
+    setCommit_data(null); // 새로 가져오기 전에 이전 데이터 초기화
+
+    try {
+      const commits = await fetchGitHubCommits(github_url); // utils 함수 호출
+      setCommit_data(commits); // 가져온 데이터를 상태에 저장
+      toast.success(`${commits.length}일치의 커밋 데이터를 가져왔습니다!`);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "커밋 데이터를 가져오는데 실패했습니다");
+      console.error(error);
+    } finally {
+      setIsLoadingCommits(false);
+    }
   }
 
   // 프로젝트 생성 함수
@@ -93,6 +129,7 @@ export default function PortfolioAdd() {
           depo_content,
           github_url,
           img: imgUrl,
+          commit_data: commit_data,
         },
       ])
       .select()
@@ -129,6 +166,7 @@ export default function PortfolioAdd() {
     setDepo("없음");
     setDepo_content("없음");
     setMembers([{ name: "", role: "" }]);
+    setCommit_data(null);
 
     await fetchProjects();
 
@@ -159,12 +197,50 @@ export default function PortfolioAdd() {
       <div className="form-wrapper">
         <label>프로젝트 제목</label>
         <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="예: 개인 포트폴리오 웹" />
-
-        <label>깃허브 링크</label>
-        <input value={github_url} onChange={(e) => setGithub_url(e.target.value)} placeholder="예: https://github.com/..." />
-
+  
+        <label>github 링크</label>
+        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}> {/* ✅ 8. div로 감싸기 */}
+          <input
+            value={github_url}
+            onChange={(e) => setGithub_url(e.target.value)}
+            placeholder="예: https://github.com/..."
+            style={{ flexGrow: 1 }} // ✅ input이 남는 공간 차지하도록
+          />
+          {/* ✅ 9. 커밋 가져오기 버튼 추가 */}
+          <button
+            type="button"
+            onClick={handleFetchCommits}
+            disabled={isLoadingCommits || !github_url}
+            className="commit-fetch-btn" // CSS 스타일링 필요
+            style={{ flexShrink: 0, padding: '8px 12px', whiteSpace: 'nowrap' }} // 줄바꿈 방지 등
+          >
+            {isLoadingCommits ? (
+              <Loader2 className="animate-spin" size={16} style={{ marginRight: '4px' }} />
+            ) : (
+              '🌳 '
+            )}
+            커밋 가져오기
+          </button>
+        </div>
+        {/* ✅ 10. 커밋 가져오기 성공 시 메시지 (선택 사항) */}
+        {commit_data && (
+          <p style={{ fontSize: '0.8rem', color: 'green', marginTop: '4px' }}>
+            ✅ {commit_data.length}일치 커밋 데이터를 성공적으로 가져왔습니다.
+          </p>
+        )}
         <label>진행 상태</label>
-        <input value={stateText} onChange={(e) => setStateText(e.target.value)} placeholder="진행중 / 완료 등" />
+        <select value={stateText} onChange={(e) => setStateText(e.target.value)}>
+          {/* 기본값 (선택을 유도) */}
+          <option value="" disabled>
+            -- 진행 상태를 선택해 주세요 --
+          </option>
+          {/* 옵션 렌더링 */}
+          {SEASON_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
 
         <label>시작일</label>
         <input type="date" value={start_at} onChange={(e) => setStart_at(e.target.value)} />

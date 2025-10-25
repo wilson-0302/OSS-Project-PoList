@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { supabase } from "../../supabase";
+import { fetchGitHubCommits } from "../../utils/github";
+import { toast } from "sonner"; // npm install sonner 필요
+import { Loader2 } from "lucide-react"; // npm install lucide-react 필요
 import "./Edit.css";
 
 export default function Edit() {
@@ -22,6 +25,16 @@ export default function Edit() {
     github_url: "",
     img: "",
   });
+
+  const [commit_data, setCommit_data] = useState(null); 
+  const [isLoadingCommits, setIsLoadingCommits] = useState(false);
+
+  const SEASON_OPTIONS = [
+    { value: "봄 (개발 중)", label: "🌱 봄 (개발 중)" },
+    { value: "여름 (배포 초기)", label: "🌿 여름 (배포 초기)" },
+    { value: "가을 (유지보수 중)", label: "🍂 가을 (유지보수 중)" },
+    { value: "겨울 (배포 종료)", label: "❄️ 겨울 (배포 종료)" },
+  ];
 
   // 프로젝트 + 멤버 불러오기
   useEffect(() => {
@@ -47,6 +60,7 @@ export default function Edit() {
           github_url: data.github_url || "",
           img: data.img || "",
         });
+        setCommit_data(data.commit_data || null);
       }
     }
 
@@ -63,6 +77,26 @@ export default function Edit() {
     fetchProject();
     fetchMembers();
   }, [id]);
+
+  // ✅ 커밋 가져오기 함수
+  async function handleFetchCommits() {
+    const githubUrl = form.github_url;
+    if (!githubUrl) {
+      toast.error("GitHub 링크를 먼저 입력해주세요");
+      return;
+    }
+
+    setIsLoadingCommits(true);
+    try {
+      const commits = await fetchGitHubCommits(githubUrl);
+      setCommit_data(commits); // ✅ 가져온 데이터를 상태에 저장
+      toast.success(`${commits.length}일의 커밋 데이터를 가져왔습니다`);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "커밋 데이터를 가져오는데 실패했습니다");
+    } finally {
+      setIsLoadingCommits(false);
+    }
+  }
 
   // 이미지 및 프로젝트 저장
   async function handleSave() {
@@ -95,6 +129,7 @@ export default function Edit() {
         ...form,
         img: imgUrl,
         updated_at: new Date().toISOString(),
+        commit_data: commit_data,
       })
       .eq("id", id);
 
@@ -156,18 +191,47 @@ export default function Edit() {
         />
 
         <label>깃허브 링크</label>
-        <input
-          value={form.github_url}
-          onChange={(e) => setForm({ ...form, github_url: e.target.value })}
-          placeholder="예: https://github.com/..."
-        />
+        <div className="github-link-group"> {/* ✅ 클래스 이름으로 감싸서 CSS 적용 */}
+          <input
+            value={form.github_url}
+            onChange={(e) => setForm({ ...form, github_url: e.target.value })}
+            placeholder="예: https://github.com/..."
+            style={{ flexGrow: 1 }}
+          />
+          <button
+            type="button"
+            onClick={handleFetchCommits}
+            disabled={isLoadingCommits || !form.github_url}
+            className="commit-fetch-btn"
+          >
+            {isLoadingCommits ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              '🌳'
+            )}
+            커밋 가져오기
+          </button>
+        </div>
+
+        {commit_data && (
+            <p className="commit-success-msg">
+                ✅ 현재 {commit_data.length}일치 커밋 데이터가 저장 대기 중입니다.
+            </p>
+        )}
 
         <label>진행 상태</label>
-        <input
-          value={form.state}
-          onChange={(e) => setForm({ ...form, state: e.target.value })}
-          placeholder="진행중 / 완료 등"
-        />
+        <select value={form.state} onChange={(e) => setForm({ ...form, state: e.target.value })}>
+          {/* 기존 데이터가 로드되면 해당 값이 기본으로 선택됩니다. */}
+          <option value="" disabled>
+            -- 진행 상태를 선택해 주세요 --
+          </option>
+          {/* 옵션 렌더링 */}
+          {SEASON_OPTIONS.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
 
         <label>시작일</label>
         <input

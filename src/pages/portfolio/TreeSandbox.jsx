@@ -5,7 +5,7 @@ import { GitHubContributions } from "../components/GitHubContributions"; // 경�
 
 // 1. 테스트용 가짜 데이터 (이게 DB에서 가져올 데이터의 흉내입니다)
 const mockCommits = [
-  { date: "2025-10-25", count: 23 },
+  { date: "2025-10-25", count: 24 },
   { date: "2025-10-24", count: 8 },
   { date: "2025-10-22", count: 3 },
   { date: "2025-10-21", count: 12 },

@@ -1,6 +1,8 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "../../supabase";
+import { TreeVisualization } from "../components/TreeVisualization"; 
+import { groupCommitsByWeek } from "../../utils/github";
 import "./List.css";
 
 export default function PortfolioList() {
@@ -49,6 +51,23 @@ export default function PortfolioList() {
     else setProjects(data);
   }, [user, sortOption]);
 
+  const getSeasonFromState = (state) => {
+    if (!state) return 'summer'; // 값이 없을 경우 기본값
+
+    if (state.startsWith('봄')) {
+      return 'spring';
+    }
+    if (state.startsWith('여름')) {
+      return 'summer';
+    }
+    if (state.startsWith('가을')) {
+      return 'autumn';
+    }
+    if (state.startsWith('겨울')) {
+      return 'winter';
+    }
+    return 'summer'; // 예상치 못한 값이 들어왔을 때 기본값
+  };
   // 삭제 기능
   async function deleteProject(id) {
     if (!window.confirm("정말 이 프로젝트를 삭제하시겠습니까?")) return;
@@ -125,18 +144,32 @@ export default function PortfolioList() {
               onClick={() => navigate(`detail/${p.id}`)}
               style={{ cursor: "pointer" }}
             >
-              <div className="project-thumb">
-                {p.img ? (
-                  <img src={p.img} alt={p.title} />
+              <div 
+                style={{
+                  width: "100%", 
+                  height: "240px", 
+                  display: "flex", 
+                  justifyContent: "center", 
+                  alignItems: "center",
+                  backgroundColor: '#f7f7f7', /* 나무가 잘 보이도록 배경색 추가 */
+                  borderRadius: '8px',
+                }}
+              >
+                {p.commit_data && p.commit_data.length > 0 ? (
+                  // DB에서 가져온 commit_data와 다른 props를 전달
+                  <TreeVisualization
+                    commits={p.commit_data} // DB의 jsonb 컬럼 이름을 그대로 사용
+                    season={getSeasonFromState(p.state)}      // 님의 DB 스키마에 'season' 컬럼이 없으니 임시로 설정
+                    size={"md"}
+                    // lastCommitDate는 커밋 데이터에서 가장 최근 날짜를 찾아서 넘겨줘야 함
+                    lastCommitDate={
+                        p.commit_data.reduce((latest, commit) => 
+                            new Date(commit.date) > new Date(latest.date) ? commit : latest
+                        ).date
+                    }
+                  />
                 ) : (
-                  <div
-                    style={{
-                      width: "100%",
-                      height: "240px",
-                      backgroundColor: "#fff",
-                      borderRadius: "8px",
-                    }}
-                  ></div>
+                  <p style={{ color: '#aaa', fontSize: '14px' }}>나무를 심어주세요 🌱</p>
                 )}
               </div>
 

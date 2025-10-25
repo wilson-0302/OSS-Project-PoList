@@ -12,7 +12,8 @@
 }
 
 .edit-form input,
-.edit-form textarea {
+.edit-form textarea,
+.edit-form select {
   width: 100%;
   padding: 10px 12px;
   border: 1px solid #dcded4;
@@ -25,7 +26,8 @@
 }
 
 .edit-form input:focus,
-.edit-form textarea:focus {
+.edit-form textarea:focus,
+.edit-form select:focus {
   outline: none;
   border-color: #b4bea5;
   box-shadow: 0 0 0 3px rgba(75, 96, 67, 0.15);
@@ -83,4 +85,54 @@
   display: flex;
   justify-content: center;
   gap: 12px;
+}
+
+/* === 커밋 가져오기 버튼 스타일 === */
+.commit-fetch-btn {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #e7e8e0;
+  border: 1px solid #dcded4;
+  border-radius: 10px;
+  color: #4b6043; 
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color 0.25s ease;
+}
+
+.commit-fetch-btn:hover:not(:disabled) {
+  background-color: #dcded4; 
+}
+
+.commit-fetch-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 로딩 아이콘과 레이아웃 */
+.commit-fetch-btn .animate-spin {
+  color: #4b6043; 
+  margin-right: 6px;
+}
+
+/* GitHub 링크와 버튼 레이아웃 */
+.github-link-group {
+  display: flex;
+  gap: 8px; /* 입력창과 버튼 사이 간격 */
+  align-items: center;
+  margin-top: 10px; /* Label 아래 간격 */
+}
+
+.github-link-group input {
+  flex-grow: 1;
+  margin: 0; /* form-wrapper 스타일 초기화 */
+}
+
+.commit-success-msg {
+  font-size: 0.8rem;
+  color: #28a745;
+  margin-top: 4px;
 }
