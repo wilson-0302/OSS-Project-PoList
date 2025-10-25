@@ -55,7 +55,7 @@ export function TreeVisualization({ commits, season, size = "md", lastCommitDate
 
   // 나뭇잎 개수 계산 (계절과 커밋 수에 따라)
   const getLeafCount = () => {
-    const baseCount = Math.min(Math.max(totalCommits, 5), 100);
+    const baseCount = Math.min(Math.max(totalCommits, 5), 200);
     switch (season) {
       case 'spring':
         return Math.floor(baseCount * 0.4); // 40% (새싹)
@@ -74,13 +74,14 @@ export function TreeVisualization({ commits, season, size = "md", lastCommitDate
   const leaves = useMemo(() => {
     const leafCount = getLeafCount();
     const generatedLeaves = [];
-    
+    const yShift = 20;
+
     for (let i = 0; i < leafCount; i++) {
       // 나무 상단에 나뭇잎 배치
-      const angle = (Math.PI / 180) * (Math.random() * 180 - 90);
-      const distance = Math.random() * (config.width / 3);
+      const angle = Math.random() * Math.PI;
+      const distance = Math.random() * (config.width / 3.5);
       const x = config.width / 2 + Math.cos(angle) * distance;
-      const y = config.branchOffset + Math.sin(angle) * distance;
+      const y = config.branchOffset - Math.sin(angle) * distance + yShift;
       
       generatedLeaves.push({
         x,
