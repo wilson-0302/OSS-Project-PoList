@@ -12,6 +12,7 @@ const PortfolioList = lazy(() => import("../portfolio/List"));
 const PortfolioAdd = lazy(() => import("../portfolio/Add"));
 const PortfolioDetail = lazy(() => import("../portfolio/Detail"));
 const EditPage = lazy(() => import("../portfolio/Edit"));
+const TreeSandbox = lazy(() => import("../portfolio/TreeSandbox"));
 
 function Board() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -34,6 +35,7 @@ function Board() {
             <Route path="portfolio/detail/:id" element={<PortfolioDetail />} />
             <Route path="portfolio/add" element={<PortfolioAdd />} />
             <Route path="portfolio/edit/:id" element={<EditPage />} />
+            <Route path="sandbox" element={<TreeSandbox />} />
           </Routes>
 
           {background && (

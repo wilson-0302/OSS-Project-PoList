@@ -11,3 +11,27 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+:root {
+  /* Porest 테마 색상 (Figma 참고해서 수정하세요) */
+  --spring-bud: #a6c4a7;
+  --spring-light: #d3e4d4;
+  --spring-blossom: #f4dce6;
+
+  --summer-green: #4a7c59;
+  --summer-bright: #7bb28a;
+  --summer-deep: #3b6247;
+
+  --autumn-red: #c94b4b;
+  --autumn-orange: #e88463;
+  --autumn-yellow: #f4d47c;
+  --autumn-brown: #8b4513;
+
+  --winter-bark: #a1a1a1;
+  --winter-frost: #e0e7ef;
+  --winter-snow: #ffffff;
+
+  --forest-brown: #8b4513;
+  --forest-soil: #5e3a0e;
+  --forest-green-dark: #3a5a40;
+}

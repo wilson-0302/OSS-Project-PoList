@@ -42,7 +42,6 @@ export default function PortfolioAdd() {
     if (error) console.error(error);
     else setProjects(data);
   }
-
   async function addProject() {
     if (!user) return alert("로그인 필요!");
     if (!title) return alert("제목을 입력하세요!");
