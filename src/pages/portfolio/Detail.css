@@ -91,3 +91,45 @@
   background-color: #e7d8d8;
   transform: translateY(-1px);
 }
+
+ /* 멤버 리스트 */
+.detail-members {
+  margin-top: 2rem;
+  font-family: inherit;
+  color: #333;
+}
+
+.member-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 16px;
+  color: #444;
+  border-bottom: 1.5px solid #ddd;
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+}
+
+.member-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.member-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.member-name {
+  font-weight: 500;
+  color: #222;
+}
+
+.member-role {
+  color: #555;
+}
