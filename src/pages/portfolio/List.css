@@ -208,3 +208,57 @@
   background-color: #ffffff;
   box-shadow: 0 0 4px rgba(75, 96, 67, 0.25);
 }
+
+/* === 반응형 === */
+@media (max-width: 1024px) {
+  .actions {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .actions button,
+  .actions select,
+  .search-input {
+    font-size: 0.9rem;
+    padding: 6px 10px;
+  }
+
+  .project-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: 16px;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .actions button,
+  .actions select,
+  .search-input {
+    width: 100%;
+    margin: 4px 0;
+  }
+
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-card {
+    padding: 8px;
+  }
+
+  .project-info h3 {
+    font-size: 1rem;
+  }
+
+  .project-meta {
+    font-size: 0.85rem;
+  }
+}

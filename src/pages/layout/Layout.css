@@ -29,3 +29,13 @@
   color: #4b6043;
   margin-bottom: 10px;
 }
+
+@media (max-width: 768px) {
+  .main-content {
+    padding-bottom: 40px;
+  }
+
+  .page {
+    padding: 12px;
+  }
+}

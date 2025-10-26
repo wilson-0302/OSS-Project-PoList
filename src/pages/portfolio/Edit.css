@@ -136,3 +136,33 @@
   color: #28a745;
   margin-top: 4px;
 }
+
+@media (max-width: 768px) {
+  .edit-form {
+    gap: 8px;
+  }
+
+  .edit-form label {
+    font-size: 14px;
+  }
+
+  .edit-form input,
+  .edit-form textarea,
+  .edit-form select {
+    font-size: 14px;
+  }
+
+  .file-preview {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .edit-btn-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .save-btn, .cancel-btn {
+    width: 100%;
+  }
+}

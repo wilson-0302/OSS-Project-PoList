@@ -97,3 +97,23 @@
     font-size: 0.8rem;
   }
 }
+
+@media (max-width: 480px) {
+  .main-title {
+    font-size: 1.5rem;
+  }
+
+  .main-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .main-header {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .main-login-btn {
+    width: 100%;
+    padding: 8px 0;
+  }
+}
