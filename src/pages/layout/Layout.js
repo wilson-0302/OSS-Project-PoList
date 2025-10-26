@@ -27,6 +27,17 @@ function Board() {
       <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
 
       <main className="main-content">
+        <header className="main-header"> {/* CSS 스타일링 필요 */}
+          {/* 햄버거 메뉴 버튼 (항상 보임, 특히 모바일에서 중요) */}
+          <button
+            className="mobile-menu-button" /* CSS 스타일링 필요 */
+            onClick={toggleSidebar}
+            aria-label="Toggle sidebar" /* 접근성 */
+          >
+            <Menu size={24} /> {/* Menu 아이콘 사용 */}
+          </button>
+          {/* (선택) 여기에 현재 페이지 제목 등을 추가할 수 있습니다 */}
+        </header>
         <Suspense fallback={<div>로딩중...</div>}>
           <Routes location={background || location}>
             <Route index element={<Home />} />
