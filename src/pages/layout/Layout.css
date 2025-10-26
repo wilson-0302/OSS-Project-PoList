@@ -39,3 +39,9 @@
     padding: 12px;
   }
 }
+
+@media (min-width: 768px) { /* 768px 이상 (태블릿/데스크톱) 화면 */
+  .main-header {
+    display: none; /* 버튼 숨기기 */
+  }
+}
