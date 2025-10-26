@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { lazy, Suspense } from "react";
+import { Menu } from "lucide-react";
 
 import Sidebar from "./components/Sidebar";
 import Modal from "../components/Modal";
