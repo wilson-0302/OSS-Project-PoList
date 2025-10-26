@@ -116,14 +116,6 @@ export default function PortfolioList() {
         <select
           value={sortOption}
           onChange={(e) => setSortOption(e.target.value)}
-          style={{
-            marginLeft: "10px",
-            padding: "8px 12px",
-            borderRadius: "8px",
-            border: "1px solid #ccc",
-            backgroundColor: "#fafaf7",
-            color: "#4b6043",
-          }}
         >
           <option value="latest">최신순</option>
           <option value="title">이름순</option>

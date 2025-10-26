@@ -5,6 +5,12 @@
 
 .actions {
   margin-bottom: 20px;
+  width: 100%; 
+  max-width: 100%;
+  
+  display: flex; 
+  justify-content: flex-start; 
+  align-items: center;
 }
 
 .actions button {
@@ -23,12 +29,28 @@
   background: #3a4f37;
 }
 
+.actions select {
+  /* 💡 핵심 수정: 너비를 고정하여 변화를 막습니다. */
+  width: 140px; /* 원하는 너비로 고정 (예: 140px) */
+  max-width: 100%; /* 부모 너비를 넘지 않도록 */
+  /* ... (기존 스타일 유지) ... */
+  
+  /* 기존 인라인 스타일을 CSS 파일로 가져와 통일성을 높입니다. */
+  margin-left: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #fafaf7;
+  color: #4b6043;
+}
+
 /* 카드 그리드 */
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
   margin-top: 20px;
+  width:100%;
 }
 
 /* 개별 카드 */
@@ -41,6 +63,7 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .project-card:hover {

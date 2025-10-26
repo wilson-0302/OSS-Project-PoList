@@ -67,7 +67,10 @@ export default function Dashboard({ onEdit, onDelete }) { // onEdit, onDelete pr
       });
       return acc;
     }, {});
-    
+
+    const top5Categories = Object.entries(categoryCounts)
+    .sort(([, countA], [, countB]) => countB - countA) // 사용 횟수(count) 기준 내림차순 정렬
+    .slice(0, 5);
     // 3. 계절(상태)별 분포 (DB 컬럼명: state)
     const seasonCounts = projects.reduce((acc, p) => {
       const stateKey = p.state || 'N/A'; // DB state 컬럼을 key로 사용
@@ -75,7 +78,7 @@ export default function Dashboard({ onEdit, onDelete }) { // onEdit, onDelete pr
       return acc;
     }, {});
 
-    return { recentPortfolios, categoryCounts, seasonCounts };
+    return { recentPortfolios, categoryCounts, seasonCounts, top5Categories };
   }, [projects]);
 
 
@@ -131,16 +134,16 @@ export default function Dashboard({ onEdit, onDelete }) { // onEdit, onDelete pr
           {/* 1. 카테고리별 분포 */}
           <Card>
             <CardHeader>
-              <CardTitle>기술/카테고리 분포</CardTitle>
-              <CardDescription>가장 많이 사용한 기술/분야</CardDescription>
+              <CardTitle>기술 스택 분포</CardTitle>
+              <CardDescription>가장 많이 사용한 기술 스택 Top5</CardDescription>
             </CardHeader>
             <CardContent>
-              {Object.keys(stats.categoryCounts).length > 0 ? (
+              {Object.keys(stats.top5Categories).length > 0 ? (
                 <div className="space-y-3">
-                  {Object.entries(stats.categoryCounts).map(([category, count]) => (
+                  {stats.top5Categories.map(([category, count]) => ( 
                     <div key={category} className="flex items-center justify-between border-b pb-1 last:border-b-0">
-                      <span className="text-sm">{category}</span>
-                      <Badge variant="secondary">{count}개</Badge>
+                        <span className="text-sm">{category}</span>
+                        <Badge variant="secondary">{count}개</Badge>
                     </div>
                   ))}
                 </div>
