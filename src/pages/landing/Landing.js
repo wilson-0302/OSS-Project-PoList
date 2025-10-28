@@ -20,7 +20,7 @@ export default function Main({ session }) {
   return (
     <div className="main-container">
       {/* 상단 네비게이션 */}
-      <header className="main-header">
+      <header className="main-header2">
         <div className="main-logo">
           <TreePine className="main-logo-icon" />
           Porest
